@@ -5,10 +5,14 @@ run:
     go run .
 
 build:
-    go build .
+    go build -o todo-app .
+
+build-minimal:
+    @echo "💡Removing debug symbols from Go binaries is not the best idea"
+    go build -ldflags "-w -s" -o todo-app-minimal .
 
 clean:
-    - rm todoapp
+    - rm todo-app*
 
 # Postgres tasks
 
