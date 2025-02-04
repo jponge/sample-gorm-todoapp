@@ -1,5 +1,6 @@
 set shell := ["zsh", "-cu"]
 
+# Go tasks
 run:
     go run .
 
@@ -8,6 +9,8 @@ build:
 
 clean:
     - rm todoapp
+
+# Postgres tasks
 
 run-postgres:
     podman container run \
@@ -21,3 +24,15 @@ kill-postgres:
     - podman container rm postgres-todo
 
 restart-postgres: kill-postgres run-postgres
+
+# Podman tasks
+
+build-container-image:
+    podman build . --tag todoapp
+
+create-pod:
+    podman kube play --replace pod.yml
+
+delete-pod:
+    - podman pod kill todo-app-pod
+    - podman pod rm todo-app-pod
