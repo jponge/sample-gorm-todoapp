@@ -4,6 +4,7 @@ import com.example.demo.data.Todo;
 import com.example.demo.data.TodoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +45,7 @@ public class ApiController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public Todo update(@PathVariable Long id, @RequestBody Todo update) {
         logger.info("Updating todo with id {}", id);
         return repository.findById(id)
