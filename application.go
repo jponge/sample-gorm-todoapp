@@ -125,10 +125,16 @@ func (app *Application) updateTodo() http.HandlerFunc {
 		}
 		id := chi.URLParam(r, "id")
 		todo := &Todo{}
-		app.Database.First(todo, id)
-		todo.Title = update.Title
-		todo.Complete = update.Complete
-		app.Database.Save(todo)
+		err = app.Database.Transaction(func(tx *gorm.DB) error {
+			tx.First(todo, id)
+			todo.Title = update.Title
+			todo.Complete = update.Complete
+			tx.Save(todo)
+			return nil
+		})
+		if err != nil {
+			render.Status(r, http.StatusInternalServerError)
+		}
 		render.JSON(w, r, todo)
 	}
 }
