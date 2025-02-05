@@ -40,3 +40,15 @@ create-pod:
 delete-pod:
     - podman pod kill todo-app-pod
     - podman pod rm todo-app-pod
+
+# Running tasks
+
+push-data port:
+    http :{{port}}/ title="Buy bread" complete:=false
+    http :{{port}}/ title="Buy cheese" complete:=false
+    http :{{port}}/ title="Buy red wine" complete:=true
+    http :{{port}}/ title="Buy chocolate" complete:=false
+
+apply-load port:
+    wrk --latency --threads 4 --connections 20 --duration 30s http://localhost:{{port}}
+    wrk --latency --threads 4 --connections 20 --duration 30s http://localhost:{{port}}/1
